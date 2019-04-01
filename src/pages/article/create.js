@@ -21,6 +21,11 @@ class ArticleCreate extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.props)
+
+    let {match} = this.props
+
+    // getxxx(match.path
     this.getLabel();
     this.getCategory();
   }

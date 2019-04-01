@@ -5,7 +5,7 @@ import untils from "../../untils";
 import "../../assets/style/public.less";
 import {Row,Input, Col, Select, Button, Divider, Popconfirm,  } from "antd";
 import {tips} from "../../actions";
-import {Link} from "react-router-dom";
+import {Link, NavLink} from "react-router-dom";
 
 const InputGroup = Input.Group;
 const Option = Select.Option;
@@ -48,9 +48,9 @@ class ArticleList extends React.Component {
       key: 'action',
       render: (text, record) => (
         <span>
-          <Link to={`/article/${record.id}`}>
+          <NavLink to={`/article/${record.id}`}>
             <Button size={"small"} type="primary" icon="edit">编辑</Button>
-          </Link>
+          </NavLink>
           <Divider type="vertical"/>
           <Popconfirm title="确定要删除吗？" okText="Yes" cancelText="No" onConfirm={() => this.del(record)}>
             <Button size={"small"} type="danger" icon="edit" ghost>删除</Button>

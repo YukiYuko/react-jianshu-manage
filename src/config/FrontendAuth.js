@@ -6,13 +6,20 @@ import AdminPage from "../pages/admin";
 export class FrontendAuth extends React.Component {
   render() {
     const {location, config} = this.props;
-    console.log(this.props)
-    const {pathname} = location;
+    const {pathname, state} = location;
     const isLogin = getStorage("token");
     // 如果该路由不用进行权限校验，登录状态下登陆页除外
     // 因为登陆后，无法跳转到登陆页
     // 这部分代码，是为了在非登陆状态下，访问不需要权限校验的路由
-    const targetRouterConfig = config.find((v) => v.path === pathname);
+    const targetRouterConfig = config.find((v) => {
+      if (v.path.indexOf(":") > 0) {
+        // 当有参数时候的处理
+        let path = v.path.split(":")[0];
+        return pathname.indexOf(path) > -1;
+      } else {
+        return v.path === pathname
+      }
+    });
     if (targetRouterConfig && !targetRouterConfig.auth && !isLogin) {
       const {component} = targetRouterConfig;
       return <Route exact path={pathname} component={component}/>
@@ -28,7 +35,8 @@ export class FrontendAuth extends React.Component {
           return <Route path="/" render={()=>
             <AdminPage targetRouterConfig={targetRouterConfig}>
               <Switch>
-                <Route exact path={pathname} component={targetRouterConfig.component} />
+                <Route path={targetRouterConfig.path} component={targetRouterConfig.component} />
+                {/*<Route path={pathname} component={targetRouterConfig.component} />*/}
               </Switch>
             </AdminPage>
           } />
