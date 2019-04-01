@@ -23,7 +23,7 @@ const menu = (
 class HeadBar extends Component {
   render() {
     return (
-      <Header style={{background: '#fff', padding: "0 20px"}}>
+      <Header style={{background: '#fff', padding: "0 20px", boxShadow: "0 1px 4px rgba(0,21,41,.08)", zIndex: 1}}>
         <Dropdown overlay={menu} placement="bottomLeft">
           <div className="admin-header-user">
             <Avatar style={{backgroundColor: '#87d068'}} icon="user"/>

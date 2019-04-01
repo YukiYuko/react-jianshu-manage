@@ -4,7 +4,7 @@
  */
 import axios from 'axios';
 import {message} from 'antd';
-import {getStorage} from "../untils/localstorage";
+import {getStorage, removeStorage} from "../untils/localstorage";
 
 /**
  * 提示函数
@@ -15,7 +15,7 @@ const tip = msg => {
 /**
  * 错误提示函数
  */
-const error = msg => {
+const error_tips = msg => {
   message.error(msg);
 };
 
@@ -86,10 +86,15 @@ instance.interceptors.response.use(
       if (res.data.code === 200) {
         return Promise.resolve(res.data)
       } else {
-        error(res.data.msg);
+        error_tips(res.data.msg);
+        if (res.data.code === 301) {
+          removeStorage("token");
+          window.location.href = "/login";
+        }
         return Promise.reject(res)
       }
     } else {
+      error_tips("系统错误---");
       return Promise.reject(res)
     }
   },
@@ -106,6 +111,8 @@ instance.interceptors.response.use(
       // network状态在app.vue中控制着一个全局的断网提示组件的显示隐藏
       // 关于断网组件中的刷新重新获取数据，会在断网组件中说明
       // store.commit('changeNetwork', false);
+      error_tips("系统错误-");
+      return Promise.reject('系统错误');
     }
   });
 
