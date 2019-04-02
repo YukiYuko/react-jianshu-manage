@@ -17,6 +17,9 @@ const article = {
   create (params) {
     return axios.post(`${base.sq}/article/create`, params);
   },
+  update (params) {
+    return axios.post(`${base.sq}/article/update`, params);
+  },
   /**
    * @description: 文章列表
    * @params
@@ -31,6 +34,14 @@ const article = {
    */
   del(id) {
     return axios.post(`${base.sq}/article/del`, {id});
+  },
+  /**
+   * @description 获取文章详情
+   * @param id
+   * @return {Q.Promise<any> | AxiosPromise<any>}
+   */
+  detail(id) {
+    return axios.post(`${base.sq}/article/detail`, {id});
   }
   // 其他接口…………
 };

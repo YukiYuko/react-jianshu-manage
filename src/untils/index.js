@@ -8,6 +8,6 @@ export default {
   },
   day_format(time) {
     if(!time)return '';
-    return dayjs(time).format("YYYY-MM-DD hh:mm")
+    return dayjs(time).format("YYYY-MM-DD HH:mm")
   }
 }

@@ -2,10 +2,11 @@ import React from 'react';
 import {
   Form, Input, Row, Col, Checkbox, Button, message, Icon, Modal, PageHeader, Select
 } from 'antd';
-import Rich from "../../components/public/Rich";
-import draftjs from "draftjs-to-html";
 import article from "../../api/article";
 import system from "../../api/system";
+import BraftEditor from 'braft-editor';
+import 'braft-editor/dist/index.css';
+
 
 const Option = Select.Option;
 
@@ -16,39 +17,68 @@ class ArticleCreate extends React.Component {
       labels: [],
       visible: false,
       name: "",
-      category: []
+      category: [],
+      id: "",
+      formData: {},
+      content: ""
     }
   }
 
   componentDidMount() {
-    console.log(this.props)
-
-    let {match} = this.props
-
-    // getxxx(match.path
+    let id = this.props.match.params.id;
+    if (id && id!=="create") {
+      this.setState({
+        id
+      }, () => {
+        this.getData();
+      })
+    }
     this.getLabel();
     this.getCategory();
   }
-
+  // 获取文章详情
+  getData() {
+    article.detail(this.state.id).then((res) => {
+      let data = res.data;
+      data.label = data.label.split(",");
+      this.props.form.setFieldsValue({
+        content: BraftEditor.createEditorState(data.content)
+      });
+      this.setState({
+        formData: data,
+        content: BraftEditor.createEditorState(data.content)
+      });
+    })
+  }
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        article.create(values).then(() => {
-          message.success("发布成功!");
-          this.props.form.resetFields();
+        let content = values.content.toHTML();
+        let params = {...values, content};
+        let method = "create";
+        if (this.state.id && this.state.id !== "create") {
+          params = { ...params, id: this.state.id};
+          method = "update";
+        }
+        article[method](params).then(() => {
+          message.success("成功!");
           this.props.form.setFieldsValue({
-            content: ""
+            content: BraftEditor.createEditorState(""),
+            title: "",
+            cid: "",
+            label: []
           });
+          this.setState({
+            content: ''
+          })
         });
       }
     });
   };
-  setContent = (content) => {
-    this.props.form.setFieldsValue({
-      content: draftjs(content)
-    });
+  handleEditorChange = (content) => {
+    this.setState({ content })
   };
 
   // 获取标签
@@ -88,6 +118,7 @@ class ArticleCreate extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { formData, content } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -131,6 +162,7 @@ class ArticleCreate extends React.Component {
               label="标题"
             >
               {getFieldDecorator('title', {
+                initialValue: formData.title,
                 rules: [{
                   required: true, message: '请输入标题!',
                 }],
@@ -143,6 +175,7 @@ class ArticleCreate extends React.Component {
               label="文章分类"
             >
               {getFieldDecorator('cid', {
+                initialValue: formData.cid,
                 rules: [{
                   required: true, message: '请选择分类!',
                 }],
@@ -157,6 +190,7 @@ class ArticleCreate extends React.Component {
               label="标签"
             >
               {getFieldDecorator('label', {
+                initialValue: formData.label,
                 rules: [{
                   required: true, message: '请至少选择一个标签!',
                 }],
@@ -170,11 +204,14 @@ class ArticleCreate extends React.Component {
               label="内容"
             >
               {getFieldDecorator('content', {
+                initialValue: content,
                 rules: [{
                   required: true, message: '请输入内容!',
                 }],
               })(
-                <Rich setContent={this.setContent}/>
+                <BraftEditor
+                  onChange={this.handleEditorChange}
+                />
               )}
             </Form.Item>
             <Form.Item {...tailFormItemLayout}>

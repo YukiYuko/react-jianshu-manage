@@ -36,12 +36,18 @@ class ArticleList extends React.Component {
     },{
       title: '作者',
       dataIndex: 'author',
-      width: '10%'
+      width: '10%',
+      render: (text, record)  =>record.author.username
     }, {
       title: '发布时间',
       dataIndex: 'createdAt',
       width: '10%',
       render: createdAt => untils.day_format(createdAt)
+    },{
+      title: '修改时间',
+      dataIndex: 'updatedAt',
+      width: '10%',
+      render: updatedAt => untils.day_format(updatedAt)
     },{
       width: '10%',
       title: 'Action',
