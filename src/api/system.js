@@ -4,6 +4,7 @@ import axios from '../axios/ajax'; // 导入http中创建的axios实例
 
 const SYSTEM = "system";
 const LABEL = "label";
+const BANNER = "banner";
 
 const system = {
   /**
@@ -22,6 +23,24 @@ const system = {
   },
   label_del(type = LABEL, params) {
     return axios.post(`${base.sq}/${SYSTEM}/${type}/del`, params);
+  },
+  /**
+   * @description 创建banner
+   * @param params
+   * @return {Q.Promise<any> | AxiosPromise<any>}
+   */
+  banner_create(params) {
+    return axios.post(`${base.sq}/${SYSTEM}/${BANNER}/create`, params);
+  },
+  /**
+   * @description 获取banner列表
+   * @return {Q.Promise<any> | AxiosPromise<any>}
+   */
+  banner_list() {
+    return axios.post(`${base.sq}/${SYSTEM}/${BANNER}/list`);
+  },
+  banner_del(id) {
+    return axios.post(`${base.sq}/${SYSTEM}/${BANNER}/del`, {id});
   },
 };
 

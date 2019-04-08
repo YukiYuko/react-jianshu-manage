@@ -23,16 +23,16 @@ class Admin extends Component {
 
   componentDidMount() {
     //获取天气
-    let url = `https://api.map.baidu.com/telematics/v3/weather?location=${encodeURIComponent(this.state.city)}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`;
-    jsonp.jsonp({
-      url
-    }).then((res) => {
-      let data = res.results[0].weather_data[0];
-      this.setState({
-        dayPictureUrl:data.dayPictureUrl,
-        weather:data.weather + " " + data.wind
-      });
-    });
+    // let url = `https://api.map.baidu.com/telematics/v3/weather?location=${encodeURIComponent(this.state.city)}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`;
+    // jsonp.jsonp({
+    //   url
+    // }).then((res) => {
+    //   let data = res.results[0].weather_data[0];
+    //   this.setState({
+    //     dayPictureUrl:data.dayPictureUrl,
+    //     weather:data.weather + " " + data.wind
+    //   });
+    // });
     // 自动更新时间
     // setInterval(() => {
     //   this.setState({
@@ -42,7 +42,7 @@ class Admin extends Component {
   }
 
   render() {
-    const {sysTime, dayPictureUrl, weather, city} = this.state;
+    const {dayPictureUrl, weather, city} = this.state;
     const {targetRouterConfig} = this.props;
     return (
       <Layout id="components-layout-demo-responsive">
@@ -58,14 +58,14 @@ class Admin extends Component {
                 </Breadcrumb>
               </Col>
               <Col>
-                <div className="weather">
-                  {/*<span>{sysTime}</span>*/}
-                  <img src={dayPictureUrl} alt={city}/>
-                  <span>{weather}</span>
-                </div>
+                {/*<div className="weather">*/}
+                  {/*/!*<span>{sysTime}</span>*!/*/}
+                  {/*<img src={dayPictureUrl} alt={city}/>*/}
+                  {/*<span>{weather}</span>*/}
+                {/*</div>*/}
               </Col>
             </Row>
-            <div style={{ padding: 24, background: '#fff', margin: '24px 16px',}}>
+            <div style={{ padding: "24px 0 24px 24px", background: '#fff', margin: '24px 16px',}}>
               { this.props.children }
             </div>
           </Content>

@@ -6646,6 +6646,11 @@ mini-store@^2.0.0:
     react-lifecycles-compat "^3.0.4"
     shallowequal "^1.0.2"
 
+minigrid@^3.1.1:
+  version "3.1.1"
+  resolved "http://registry.npm.taobao.org/minigrid/download/minigrid-3.1.1.tgz#8d7876c01aa300f4feff17837d546cd9e8b1f422"
+  integrity sha1-jXh2wBqjAPT+/xeDfVRs2eix9CI=
+
 minimalistic-assert@^1.0.0, minimalistic-assert@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz#2e194de044626d4a10e7f7fbc00ce73e83e4d5c7"
