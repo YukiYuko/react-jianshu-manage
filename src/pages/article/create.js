@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-  Form, Input, Row, Col, Checkbox, Button, message, Icon, Modal, PageHeader, Select
+  Form, Input, Row, Col, Checkbox, Button, message, Icon, Modal, PageHeader, Select,
+  Upload
 } from 'antd';
 import article from "../../api/article";
 import system from "../../api/system";
@@ -20,7 +21,10 @@ class ArticleCreate extends React.Component {
       category: [],
       id: "",
       formData: {},
-      content: ""
+      content: "",
+      fileList: [],
+      previewVisible: false,
+      previewImage: ""
     }
   }
 
@@ -56,7 +60,7 @@ class ArticleCreate extends React.Component {
       if (!err) {
         console.log('Received values of form: ', values);
         let content = values.content.toHTML();
-        let params = {...values, content};
+        let params = {...values, content, fileList: values.fileList.fileList};
         let method = "create";
         if (this.state.id && this.state.id !== "create") {
           params = { ...params, id: this.state.id};
@@ -68,7 +72,8 @@ class ArticleCreate extends React.Component {
             content: BraftEditor.createEditorState(""),
             title: "",
             cid: "",
-            label: []
+            label: [],
+            desc: ""
           });
           this.setState({
             content: ''
@@ -116,9 +121,35 @@ class ArticleCreate extends React.Component {
     })
   };
 
+  // 上传之前
+  beforeUpload = (file) => {
+    this.setState(state => ({
+      fileList: [...state.fileList, file],
+    }));
+    return false;
+  };
+  onRemove = (file) => {
+    this.setState((state) => {
+      const index = state.fileList.indexOf(file);
+      const newFileList = state.fileList.slice();
+      newFileList.splice(index, 1);
+      return {
+        fileList: newFileList,
+      };
+    });
+  };
+  handlePreview = (file) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  };
+  handleChange = ({ fileList }) => this.setState({ fileList });
+  handleCancel = () => this.setState({ previewVisible: false });
+
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { formData, content } = this.state;
+    const { formData, content, fileList, previewVisible, previewImage} = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -149,6 +180,12 @@ class ArticleCreate extends React.Component {
     });
 
     const {visible, name} = this.state;
+    const uploadButton = (
+      <div>
+        <Icon type="plus" />
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
     return (
       <Row>
         <Col span={20}>
@@ -156,7 +193,28 @@ class ArticleCreate extends React.Component {
             onBack={() => this.props.history.goBack()}
             title="返回"
           />
+          <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel} onRemove={this.onRemove}>
+            <img alt="example" style={{ width: '100%' }} src={previewImage} />
+          </Modal>
           <Form onSubmit={this.handleSubmit}>
+            <Form.Item
+              {...formItemLayout}
+              label="头图"
+            >
+              {getFieldDecorator('fileList', {
+                initialValue: fileList,
+              })(
+                <Upload
+                  listType="picture-card"
+                  fileList={fileList}
+                  beforeUpload={this.beforeUpload}
+                  onPreview={this.handlePreview}
+                  onChange={this.handleChange}
+                >
+                  {fileList && fileList.length >= 3 ? null : uploadButton}
+                </Upload>
+              )}
+            </Form.Item>
             <Form.Item
               {...formItemLayout}
               label="标题"
@@ -168,6 +226,16 @@ class ArticleCreate extends React.Component {
                 }],
               })(
                 <Input />
+              )}
+            </Form.Item>
+            <Form.Item
+              {...formItemLayout}
+              label="描述"
+            >
+              {getFieldDecorator('desc', {
+                initialValue: formData.desc
+              })(
+                <Input.TextArea />
               )}
             </Form.Item>
             <Form.Item
