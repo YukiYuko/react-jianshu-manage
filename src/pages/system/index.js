@@ -6,6 +6,7 @@ import {Route, Link, Switch} from "react-router-dom";
 import Label from "./label";
 import Category from "./category";
 import Banner from "./banner";
+import FriendLink from "./link";
 
 const {
   Content, Sider,
@@ -38,6 +39,7 @@ class System extends React.Component{
                 <Menu.Item key="/system/label"><Link to="/system/label">标签设置</Link></Menu.Item>
                 <Menu.Item key="/system/category"><Link to="/system/category">文章分类</Link></Menu.Item>
                 <Menu.Item key="/system/banner"><Link to="/system/banner">头图设置</Link></Menu.Item>
+                <Menu.Item key="/system/links"><Link to="/system/links">友情链接</Link></Menu.Item>
               </Menu>
             </Sider>
             <Content style={{ padding: '0 24px', minHeight: 280 }}>
@@ -45,6 +47,7 @@ class System extends React.Component{
                 <Route path="/system/label" component={Label} />
                 <Route path="/system/category" component={Category} />
                 <Route path="/system/banner" component={Banner} />
+                <Route path="/system/links" component={FriendLink} />
               </Switch>
             </Content>
           </Layout>

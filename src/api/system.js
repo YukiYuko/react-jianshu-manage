@@ -5,8 +5,10 @@ import axios from '../axios/ajax'; // 导入http中创建的axios实例
 const SYSTEM = "system";
 const LABEL = "label";
 const BANNER = "banner";
+const LINK = "link";
 
 const system = {
+  // ***************************标签和分类************************
   /**
    * @description 创建标签
    * @param type
@@ -24,6 +26,7 @@ const system = {
   label_del(type = LABEL, params) {
     return axios.post(`${base.sq}/${SYSTEM}/${type}/del`, params);
   },
+  // ***************************banner************************************
   /**
    * @description 创建banner
    * @param params
@@ -41,6 +44,20 @@ const system = {
   },
   banner_del(id) {
     return axios.post(`${base.sq}/${SYSTEM}/${BANNER}/del`, {id});
+  },
+  //  *******************************友情链接********************************
+  link_create(params) {
+    return axios.post(`${base.sq}/${SYSTEM}/${LINK}/create`, params);
+  },
+  /**
+   * @description 获取banner列表
+   * @return {Q.Promise<any> | AxiosPromise<any>}
+   */
+  link_list() {
+    return axios.post(`${base.sq}/${SYSTEM}/${LINK}/list`);
+  },
+  link_del(id) {
+    return axios.post(`${base.sq}/${SYSTEM}/${LINK}/del`, {id});
   },
 };
 

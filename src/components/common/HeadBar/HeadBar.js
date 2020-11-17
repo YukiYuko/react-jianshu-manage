@@ -8,14 +8,14 @@ const {
 const menu = (
   <Menu>
     <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/"><Icon type="user" /> 个人中心</a>
+      <div rel="noopener noreferrer"><Icon type="user" /> 个人中心</div>
     </Menu.Item>
     <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/"><Icon type="setting" /> 个人设置</a>
+      <div rel="noopener noreferrer"><Icon type="setting" /> 个人设置</div>
     </Menu.Item>
     <Menu.Divider/>
     <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/"><Icon type="logout" /> 退出登录</a>
+      <div rel="noopener noreferrer"><Icon type="logout" /> 退出登录</div>
     </Menu.Item>
   </Menu>
 );

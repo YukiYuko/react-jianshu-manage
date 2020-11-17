@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Layout, Breadcrumb, Row, Col } from 'antd';
-import jsonp from "../../axios/jsonp";
+// import jsonp from "../../axios/jsonp";
 import LeftNav from "../../components/common/LeftNav/LeftNav";
 import HeadBar from "../../components/common/HeadBar/HeadBar";
 import FootBar from "../../components/common/FootBar/FootBar";
@@ -42,7 +42,7 @@ class Admin extends Component {
   }
 
   render() {
-    const {dayPictureUrl, weather, city} = this.state;
+    // const {dayPictureUrl, weather, city} = this.state;
     const {targetRouterConfig} = this.props;
     return (
       <Layout id="components-layout-demo-responsive">
@@ -65,7 +65,7 @@ class Admin extends Component {
                 {/*</div>*/}
               </Col>
             </Row>
-            <div style={{ padding: "24px 0 24px 24px", background: '#fff', margin: '24px 16px',}}>
+            <div style={{ padding: "24px", background: '#fff', margin: '24px 16px',}}>
               { this.props.children }
             </div>
           </Content>

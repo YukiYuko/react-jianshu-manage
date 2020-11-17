@@ -20,6 +20,14 @@ const article = {
   update (params) {
     return axios.post(`${base.sq}/article/update`, params);
   },
+  /*
+  @description: 修改文章状态
+  @params: id 文章ID
+  @params: status 文章状态 必须为 1, 2, 3
+   */
+  updateStatus (params) {
+    return axios.post(`${base.sq}/article/updateStatus`, params);
+  },
   /**
    * @description: 文章列表
    * @params

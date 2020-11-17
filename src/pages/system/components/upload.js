@@ -9,11 +9,11 @@ import {
 import {tips} from "../../../actions";
 import {getStorage} from "../../../untils/localstorage";
 
-function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
+// function getBase64(img, callback) {
+//   const reader = new FileReader();
+//   reader.addEventListener('load', () => callback(reader.result));
+//   reader.readAsDataURL(img);
+// }
 
 function beforeUpload(file) {
   const types = ["image/jpeg", "image/png"];

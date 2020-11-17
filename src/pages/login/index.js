@@ -2,7 +2,7 @@ import React from 'react'
 import {Form, Input, Button} from 'antd'
 import Footer from '../../components/common/FootBar/FootBar'
 import './index.less'
-import admin from "../../api/admin";
+import user from "../../api/user";
 import {setStorage} from "../../untils/localstorage";
 
 const FormItem = Form.Item;
@@ -14,8 +14,8 @@ export default class Login extends React.Component {
   }
 
   loginReq = (params) => {
-    admin.login(params).then((res) => {
-      setStorage("token", res.data);
+    user.login(params).then((res) => {
+      setStorage("token", res.data.token);
       window.location.href = "/home";
     })
   };
@@ -60,7 +60,7 @@ class LoginForm extends React.Component {
       if (!err) {
         let formValue = _this.props.form.getFieldsValue();
         _this.props.loginSubmit({
-          username: formValue.username,
+          email: formValue.email,
           password: formValue.password
         });
       }
@@ -68,11 +68,10 @@ class LoginForm extends React.Component {
   };
 
   checkUsername = (rule, value, callback) => {
-    let reg = /^\w+$/;
+    // let reg = /^\w+$/;
+    // !reg.test(value)
     if (!value) {
       callback('请输入用户名!');
-    } else if (!reg.test(value)) {
-      callback('用户名只允许输入英文字母');
     } else {
       callback();
     }
@@ -91,8 +90,8 @@ class LoginForm extends React.Component {
     return (
       <Form className="login-form">
         <FormItem>
-          {getFieldDecorator('username', {
-            initialValue: 'admin',
+          {getFieldDecorator('email', {
+            initialValue: 'user',
             rules: [{validator: this.checkUsername}]
           })(
             <Input placeholder="用户名"/>

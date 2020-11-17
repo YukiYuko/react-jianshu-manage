@@ -1,11 +1,9 @@
 import React from 'react';
-import admin from "../../api/admin";
+// import user from "../../api/user";
 
 class Home extends React.Component {
   componentDidMount() {
-    admin.getAdminList().then((res) => {
-      console.log(res)
-    })
+
   }
 
   render() {

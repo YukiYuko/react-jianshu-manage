@@ -73,6 +73,13 @@ export const routerConfig = [
     parent: "系统设置",
     title: "头图设置"
   },
+  {
+    path: "/system/links",
+    component: System,
+    auth: true,
+    parent: "系统设置",
+    title: "友情链接"
+  },
   // UI---------------------------
   {
     path: "/ui/buttons",

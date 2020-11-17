@@ -3,7 +3,7 @@ import { Table } from 'antd';
 import article from "../../api/article";
 import untils from "../../untils";
 import "../../assets/style/public.less";
-import {Row,Input, Col, Select, Button, Divider, Popconfirm,  } from "antd";
+import {Row,Input, Col, Select, Button, Divider, Popconfirm, Modal, Radio } from "antd";
 import {tips} from "../../actions";
 import {Link, NavLink} from "react-router-dom";
 
@@ -18,7 +18,10 @@ class ArticleList extends React.Component {
       pagination: {},
       loading: false,
       searchVal: "",
-      searchType: "title"
+      searchType: "title",
+      current: {},
+      visible: false,
+      status: 1
     };
     this.columns = [{
       title: '标题',
@@ -49,7 +52,7 @@ class ArticleList extends React.Component {
       width: '10%',
       render: updatedAt => untils.day_format(updatedAt)
     },{
-      width: '10%',
+      width: '15%',
       title: 'Action',
       key: 'action',
       render: (text, record) => (
@@ -58,7 +61,11 @@ class ArticleList extends React.Component {
             <Button size={"small"} type="primary" icon="edit">编辑</Button>
           </NavLink>
           <Divider type="vertical"/>
-          <Popconfirm title="确定要删除吗？" okText="Yes" cancelText="No" onConfirm={() => this.del(record)}>
+            <Button size={"small"} type={["", "danger", "primary", "danger"][record.status]} onClick={() => this.openStatus(record)}>
+              {["", "待审核", "已通过", "已拒绝"][record.status]}
+            </Button>
+          <Divider type="vertical"/>
+          <Popconfirm title="确定要删除吗？" okText="确定" cancelText="取消" onConfirm={() => this.del(record)}>
             <Button size={"small"} type="danger" icon="edit" ghost>删除</Button>
           </Popconfirm>
         </span>
@@ -112,8 +119,43 @@ class ArticleList extends React.Component {
       }, 1000);
     })
   };
+  // 打开修改状态弹窗
+  openStatus = (current) => {
+    this.setState({
+      current,
+      visible: true,
+      status: current.status
+    })
+  };
+  // 监听状态
+  changeStatus = (e) => {
+    this.setState({
+      status: e.target.value
+    })
+  };
+  // 确认修改状态
+  handleOk = () => {
+    Modal.confirm({
+      title: '提示',
+      content: '确定要更改文章状态吗',
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => {
+        article.updateStatus({id: this.state.current.id, status: this.state.status}).then(() => {
+          let list = [...this.state.list];
+          let index = list.findIndex(item => this.state.current.id === item.id);
+          list[index].status = this.state.status;
+          this.setState({
+            visible: false,
+            list
+          });
+          tips("修改状态成功", "success");
+        });
+      }
+    });
+  };
   render() {
-    const {list, pagination, loading, searchVal, searchType} = this.state;
+    const {list, pagination, loading, searchVal, searchType, visible, status} = this.state;
     return (
       <div>
         <div className="filterBar">
@@ -147,6 +189,19 @@ class ArticleList extends React.Component {
           loading={loading}
           onChange={this.handleTableChange}
         />
+        {/*修改状态弹窗*/}
+        <Modal
+          title="修改状态"
+          visible={visible}
+          onOk={this.handleOk}
+          onCancel={() => this.setState({visible: false})}
+        >
+          <Radio.Group onChange={(v) => this.changeStatus(v)} value={status}>
+            <Radio value={1}>待审核</Radio>
+            <Radio value={2}>已通过</Radio>
+            <Radio value={3}>已拒绝</Radio>
+          </Radio.Group>
+        </Modal>
       </div>
     );
   }

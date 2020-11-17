@@ -43,24 +43,24 @@ class ArticleCreate extends React.Component {
   // 获取文章详情
   getData() {
     article.detail(this.state.id).then((res) => {
-      let data = res.data;
-      data.label = data.label.split(",");
-      this.props.form.setFieldsValue({
-        content: BraftEditor.createEditorState(data.content)
-      });
-      this.setState({
-        formData: data,
-        content: BraftEditor.createEditorState(data.content)
-      });
+      // let data = res.data;
+      // data.label = data.label.split(",");
+      // this.props.form.setFieldsValue({
+      //   content: BraftEditor.createEditorState(data.content)
+      // });
+      // this.setState({
+      //   formData: data,
+      //   content: BraftEditor.createEditorState(data.content)
+      // });
     })
   }
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         let content = values.content.toHTML();
-        let params = {...values, content, fileList: values.fileList.fileList};
+        let tags = values.label;
+        let params = {...values, content, fileList: values.fileList.fileList, tags};
         let method = "create";
         if (this.state.id && this.state.id !== "create") {
           params = { ...params, id: this.state.id};
@@ -174,7 +174,9 @@ class ArticleCreate extends React.Component {
       },
     };
 
-    const plainOptions = this.state.labels.map((item) => item.name);
+    const plainOptions = this.state.labels.map((item) => {
+      return { label: item.name, value: item.id}
+    });
     const categoryOptions = this.state.category.map((item) => {
       return {label:item.name, value: item.id}
     });
